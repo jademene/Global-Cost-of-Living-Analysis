@@ -28,7 +28,7 @@ index_table <- data.frame(
 View(index_table)
 subset(index_table, column_name=="x34") #Find one specific row given the column label, just replace "x34"
 
-#Visualising the summary as boxplots
+#Visualising the summary as boxplots -> Significant outliers for metrics x35, x38 and x52
 library(tidyr)
 
 col_data_long <- gather(col_data, key = "metric", value = "value", -city, -country)
@@ -38,101 +38,25 @@ ggplot(col_data_long, aes(x = metric, y = value)) +
   labs(title = "Distribution of Cost of Living Metrics",
        x = "Metric", y = "Cost (USD)")
 
-#Visualising the summary as boxplots grouped by category
-restaurants <- c("x1", "x2", "x3", "x4", "x5", "x6", "x7", "x8") #columns to visualise
-restaurants1 <- col_data[, c("city", "country", restaurants)] #subset data to include only the specified columns
-restaurants1_long <- gather(restaurants1, key = "metric", value = "value", -city, -country) #gather the subsetted data into key-value pairs
-
-markets <- c("x9", "x10", "x11", "x12", "x13", "x14", "x15", "x16", "x17", "x18", "x19", "x20", "x21", "x22", "x23", "x24", "x25", "x26", "x27")
-markets1 <- col_data[, c("city", "country", markets)]
-markets1_long <- gather(markets1, key = "metric", value = "value", -city, -country)
-
-transportation <- c("x28", "x29", "x30", "x31", "x32", "x33", "x34", "x35")
-transportation1 <- col_data[, c("city", "country", transportation)]
-transportation1_long <- gather(transportation1, key = "metric", value = "value", -city, -country)
-
-utilities <- c("x36", "x37", "x38")
-utilities1 <- col_data[, c("city", "country", utilities)]
-utilities1_long <- gather(utilities1, key = "metric", value = "value", -city, -country)
-
-sports_and_leisure <- c("x39", "x40", "x41")
-sports_and_leisure1 <- col_data[, c("city", "country", sports_and_leisure)]
-sports_and_leisure1_long <- gather(sports_and_leisure1, key = "metric", value = "value", -city, -country)
-
-childcare <- c("x42", "x43")
-childcare1 <- col_data[, c("city", "country", childcare)]
-childcare1_long <- gather(childcare1, key = "metric", value = "value", -city, -country)
-
-clothing_and_shoes <- c("x44", "x45", "x46", "x47")
-clothing_and_shoes1 <- col_data[, c("city", "country", clothing_and_shoes)]
-clothing_and_shoes1_long <- gather(clothing_and_shoes1, key = "metric", value = "value", -city, -country)
-
-rent_per_month <- c("x48", "x49", "x50", "x51")
-rent_per_month1 <- col_data[, c("city", "country", rent_per_month)]
-rent_per_month1_long <- gather(rent_per_month1, key = "metric", value = "value", -city, -country)
-
-buy_apartment_price <- c("x52", "x53")
-buy_apartment_price1 <- col_data[, c("city", "country", buy_apartment_price)]
-buy_apartment_price1_long <- gather(buy_apartment_price1, key = "metric", value = "value", -city, -country)
-
-salaries_and_financing <- c("x54", "x55")
-salaries_and_financing1 <- col_data[, c("city", "country", salaries_and_financing)]
-salaries_and_financing1_long <- gather(salaries_and_financing1, key = "metric", value = "value", -city, -country)
-
-#Plots
-ggplot(restaurants1_long, aes(x = metric, y = value)) +
-  geom_boxplot(fill = "pink", color = "black") +
-  labs(title = "Distribution of Restaurants Metrics",
-       x = "Metric", y = "Cost (USD)")
-
-ggplot(markets1_long, aes(x = metric, y = value)) +
-  geom_boxplot(fill = "lightblue", color = "black") +
-  labs(title = "Distribution of Markets Metrics",
-       x = "Metric", y = "Cost (USD)")
-
-ggplot(transportation1_long, aes(x = metric, y = value)) +
-  geom_boxplot(fill = "red", color = "black") +
-  labs(title = "Distribution of Transportation Metrics",
-       x = "Metric", y = "Cost (USD)")
-
-ggplot(utilities1_long, aes(x = metric, y = value)) + #Solomon islands outlier in internet -> false data
-  geom_boxplot(fill = "orange", color = "black") +
-  labs(title = "Distribution of Utilities Metrics",
-       x = "Metric", y = "Cost (USD)")
-
-ggplot(sports_and_leisure1_long, aes(x = metric, y = value)) +
-  geom_boxplot(fill = "lightgreen", color = "black") +
-  labs(title = "Distribution of Sports And Leisure Metrics",
-       x = "Metric", y = "Cost (USD)")
-
-ggplot(childcare1_long, aes(x = metric, y = value)) +
-  geom_boxplot(fill = "yellow", color = "black") +
-  labs(title = "Distribution of Childcare Metrics",
-       x = "Metric", y = "Cost (USD)")
-
-ggplot(clothing_and_shoes1_long, aes(x = metric, y = value)) +
-  geom_boxplot(fill = "purple", color = "black") +
-  labs(title = "Distribution of Clothing And Shoes Metrics",
-       x = "Metric", y = "Cost (USD)")
-
-ggplot(rent_per_month1_long, aes(x = metric, y = value)) + #Seoul and Shanghai are outliers they might be mistakes
-  geom_boxplot(fill = "green", color = "black") +
-  labs(title = "Distribution of Rent Per Month Metrics",
-       x = "Metric", y = "Cost (USD)")
-
-ggplot(buy_apartment_price1_long, aes(x = metric, y = value)) + #Seoul is the outlier, I suspect the value is incorrect
-  geom_boxplot(fill = "brown", color = "black") +
-  labs(title = "Distribution of Buy Apartment Price Metrics",
-       x = "Metric", y = "Cost (USD)")
-
-ggplot(salaries_and_financing1_long, aes(x = metric, y = value)) + #Seoul salary outlier again, this might be another error
-  geom_boxplot(fill = "violet", color = "black") +
-  labs(title = "Distribution of Salaries And Financing Metrics",
-       x = "Metric", y = "Cost (USD)")
-
-#check for missing values
+#check for missing values - Note: good quality data has no missing values
 sum(is.na(col_data)) #45858 -> there are a lot of missing values to manage
+AAA <- colSums(is.na(col_data)) #check by column 
 
+#Do all variables miss the same amount of values? In %
+tot <- nrow(col_data)
+percent_AAA <- (AAA / tot) * 100
+barplot(dec_percent_AAA)
+
+#Imputation is discouraged for variables with +30% of data missing
+  #x28 => 30% One-way Ticket (Local Transport)
+  #x29 => 44% Monthly Pass (Transport) 
+  #x40 => 48% Tennis Court Rent 
+  #x43 => 33% International Primary School, Yearly for 1 Child
+  #x51 => 30% Apartment (3 bedrooms) Outside of Centre 
+  #x52 => 44% Price per Square Meter to Buy Apartment in City Centre
+  #x53 => 46% Price per Square Meter to Buy Apartment Outside of Centre
+#If removing the above values, variable x50 (29.8%) has no longer meaning
+  
   #OPT 1: Dropping -  remove rows with any missing values
     col_data_dropna <- na.omit(col_data)
   
@@ -184,18 +108,144 @@ sum(is.na(col_data)) #45858 -> there are a lot of missing values to manage
 library(magrittr) #so we can use the pipe operator %>%
 
 col_imputed_country <- col_data
-
 col_imputed_country <- col_imputed_country %>%
   group_by(country) %>%
   mutate(across(where(is.numeric), ~ifelse(is.na(.), mean(., na.rm = TRUE), .))) #Group by 'country' and calculate mean for each numeric column
 
+col_imputed_na <- na.omit(col_imputed_country) #drop remaining missing values
 
-data <- na.omit(col_imputed_country) #drop remaining missing values
+data <- select(col_imputed_na, -x28, -x29, -x40, -x43, -x51, -x52, -x53) #Lastly remove from data the variables highlighted above as missing too many values for analysis.
 
+View(data)
 #ANALYSIS
 sum(is.na(data)) #0
-dim(data) # obs./row:4849  variables/columns:58 -> little rows/columns lost
+dim(data) # obs./row:4849  variables/columns:51 -> little rows/columns lost
 summary(data) #compared to summary(col_imputed) -> distribution and relationships are impacted as it now pulls towards each country avg. 
-length(unique(data$country)) #153 distinct countries -> 62 lost countries
+length(unique(data$country)) #152 distinct countries -> 63 lost countries
 
+#Visualising the summary of the imputed dataset as boxplots grouped by category
+meal <- c("x1", "x2", "x3") #columns to visualise
+meal1 <- data[, c("city", "country", meal)] #subset data to include only the specified columns
+meal1_long <- gather(meal1, key = "metric", value = "value", -city, -country) #gather the subsetted data into key-value pairs
 
+restaurants <- c("x4", "x5", "x6", "x7", "x8")
+restaurants1 <- data[, c("city", "country", restaurants)]
+restaurants1_long <- gather(restaurants1, key = "metric", value = "value", -city, -country)
+
+markets <- c("x9", "x10", "x11", "x12", "x13", "x14", "x15", "x16", "x17", "x18", "x19", "x20", "x21", "x22", "x23", "x24", "x25", "x26", "x27")
+markets1 <- data[, c("city", "country", markets)]
+markets1_long <- gather(markets1, key = "metric", value = "value", -city, -country)
+
+transportation <- c("x28", "x30", "x31", "x32", "x33")
+transportation1 <- data[, c("city", "country", transportation)]
+transportation1_long <- gather(transportation1, key = "metric", value = "value", -city, -country)
+
+car <- c("x34", "x35")
+car1 <- data[, c("city", "country", car)]
+car1_long <- gather(car1, key = "metric", value = "value", -city, -country)
+
+utilities <- c("x36", "x37", "x38")
+utilities1 <- data[, c("city", "country", utilities)]
+utilities1_long <- gather(utilities1, key = "metric", value = "value", -city, -country)
+
+sports_and_leisure <- c("x39", "x41")
+sports_and_leisure1 <- data[, c("city", "country", sports_and_leisure)]
+sports_and_leisure1_long <- gather(sports_and_leisure1, key = "metric", value = "value", -city, -country)
+
+childcare <- c("x42")
+childcare1 <- data[, c("city", "country", childcare)]
+childcare1_long <- gather(childcare1, key = "metric", value = "value", -city, -country)
+
+clothing_and_shoes <- c("x44", "x45", "x46", "x47")
+clothing_and_shoes1 <- data[, c("city", "country", clothing_and_shoes)]
+clothing_and_shoes1_long <- gather(clothing_and_shoes1, key = "metric", value = "value", -city, -country)
+
+rent_per_month <- c("x48", "x49", "x50", "x51")
+rent_per_month1 <- data[, c("city", "country", rent_per_month)]
+rent_per_month1_long <- gather(rent_per_month1, key = "metric", value = "value", -city, -country)
+
+salaries_and_financing <- c("x54", "x55")
+salaries_and_financing1 <- data[, c("city", "country", salaries_and_financing)]
+salaries_and_financing1_long <- gather(salaries_and_financing1, key = "metric", value = "value", -city, -country)
+
+#Plots
+meal_plot <- ggplot(meal1_long, aes(x = metric, y = value)) +
+  geom_boxplot(fill = "grey", color = "black") +
+  labs(title = "Distribution of Restaurant Meals Metrics",
+       x = "Metric", y = "Cost (USD)")
+
+restaurant_plot <- ggplot(restaurants1_long, aes(x = metric, y = value)) +
+  geom_boxplot(fill = "pink", color = "black") +
+  labs(title = "Distribution of Restaurants Drinks Metrics",
+       x = "Metric", y = "Cost (USD)")
+
+market_plot <- ggplot(markets1_long, aes(x = metric, y = value)) +
+  geom_boxplot(fill = "lightblue", color = "black") +
+  labs(title = "Distribution of Markets Metrics",
+       x = "Metric", y = "Cost (USD)")
+
+transport_plot <- ggplot(transportation1_long, aes(x = metric, y = value)) +
+  geom_boxplot(fill = "red", color = "black") +
+  labs(title = "Distribution of Transportation Metrics",
+       x = "Metric", y = "Cost (USD)")
+
+car_plot <- ggplot(car1_long, aes(x = metric, y = value)) +
+  geom_boxplot(fill = "white", color = "black") +
+  labs(title = "Distribution of Car Metrics",
+       x = "Metric", y = "Cost (USD)")
+
+utilities_plot <- ggplot(utilities1_long, aes(x = metric, y = value)) + 
+  geom_boxplot(fill = "orange", color = "black") +
+  labs(title = "Distribution of Utilities Metrics",
+       x = "Metric", y = "Cost (USD)")
+
+sport_plot <- ggplot(sports_and_leisure1_long, aes(x = metric, y = value)) +
+  geom_boxplot(fill = "lightgreen", color = "black") +
+  labs(title = "Distribution of Sports And Leisure Metrics",
+       x = "Metric", y = "Cost (USD)")
+
+childcare_plot <- ggplot(childcare1_long, aes(x = metric, y = value)) +
+  geom_boxplot(fill = "yellow", color = "black") +
+  labs(title = "Distribution of Childcare Metrics",
+       x = "Metric", y = "Cost (USD)")
+
+clothing_plot <- ggplot(clothing_and_shoes1_long, aes(x = metric, y = value)) +
+  geom_boxplot(fill = "purple", color = "black") +
+  labs(title = "Distribution of Clothing And Shoes Metrics",
+       x = "Metric", y = "Cost (USD)")
+
+rent_plot <- ggplot(rent_per_month1_long, aes(x = metric, y = value)) + #Seoul and Shanghai are outliers they might be mistakes
+  geom_boxplot(fill = "green", color = "black") +
+  labs(title = "Distribution of Rent Per Month Metrics",
+       x = "Metric", y = "Cost (USD)")
+
+salary_plot <- ggplot(salaries_and_financing1_long, aes(x = metric, y = value)) + #Seoul salary outlier again, this might be another error
+  geom_boxplot(fill = "violet", color = "black") +
+  labs(title = "Distribution of Salaries And Financing Metrics",
+       x = "Metric", y = "Cost (USD)")
+
+#Formatting for the plots to be displayed in a grid
+#par(mfrow = c(3, 4)) -> this command works for base R plots, but not for ggplot2 plots
+library(patchwork)
+meal_plot + restaurant_plot + market_plot + transport_plot + car_plot + utilities_plot + sport_plot + childcare_plot + clothing_plot + rent_plot + salary_plot
+
+#ANALYSIS
+
+#ANALYSIS -> Outliers present in x2, x4, x15, x32, x35, x36, x39, x46, x50, x51, x52, x54
+  #x2 Meal for 2 People, Mid-range -> Mendrisio, Switzerland USD 213.69 -> considering that this looks at mid-range restaurants the price can be accepted (despite it being on the higher end)
+  #x4 Domestic Beer (in restaurant) -> Al Wakrah, Qatar USD 20.60 -> cost of beer tends to be higher in countries whose majority of the population is Muslim due to scarcity and high avg cost of living
+  #x15 Beef Round (1kg) -> top outliers are both cities from Switzerland 
+  #x32 Taxi 1hour Waiting (Normal Tariff) -> Niamay, Nigeria -> False data
+  #x34, x35 New cars -> outliers are both Iranian cities, the cost of owning a car compared to the rest of the cost of living doesn't seem to match
+  #x39 Fitness Club -> outliers are oultindish, not sure they can be relied on
+  #x46 Fitenss shoes -> 900+USD for a pair of common running shoes seems outlandish for any country?
+  #x50 Apartment (3 bedrooms) in City Centre -> Seoul + Shanghai
+  #x51 Apartment (3 bedrooms) Outside of Centre -> Kermanshah,	Iran this doesn't seem correct
+  #x54 Average Monthly Net Salary (After Tax) -> Schaan, Liechtenstein, the country is so small that for analysis purposes I think we can disregard this
+
+#ACTIONS -> Trim outliers for x15 (top 2), x32(top 1), x39 (top 2), x46 (top 2), x50 (top 2), x51 (top 1)
+
+#Other considerations
+  #in original analysis Solomon islands outlier in internet -> false data. I wonder if any of the utilities data is reliable.
+  #Niamey, Niger -> the categorical data seems incorrect, we might need to manually fact check this row -> incorrect values x32, x34, x37, x38
+  #Countries such as Greenland might simply lack the information for certain values (eg cars) so results should be taking this factors into consideration.
