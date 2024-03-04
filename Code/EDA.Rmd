@@ -2,14 +2,14 @@
 title: "Cost of Living - EDA"
 author: "Jade Meneghini"
 date: "February 2024"
-output: html_document
+output: github_document
 ---
 
 In this analysis, the costs of living worldwide is explored. The data has been scraped from [Numbeo](https://www.numbeo.com/) and can be found on [Kaggle](https://www.kaggle.com/datasets/mvieira101/global-cost-of-living/data?select=cost-of-living_v2.csv). The primary goal of this analysis is to gain familiarity and identify issues with the data provided that could impact analysis.
 
 ```{r}
 #Select the local working directory
-proj_directory <- "C:/Users/jadem/OneDrive/Desktop/BABD/Statistics/PersoProject/Statistics_Project"
+proj_directory <- "C:/Users/jadem/OneDrive/Desktop/BABD/Statistics/PersoProject/Statistics_Project/Code"
 setwd(proj_directory)
 
 #load packages
@@ -22,7 +22,7 @@ library(ggplot2)
 
 ```{r}
 #Import data from local .csv
-col_data <- read.csv("cost-of-living_v2.csv")
+col_data <- read.csv("C:/Users/jadem/OneDrive/Desktop/BABD/Statistics/PersoProject/Statistics_Project/Data/cost-of-living_v2.csv")
 ```
 
 # Exploratory data analysis
