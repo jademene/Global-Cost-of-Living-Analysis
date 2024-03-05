@@ -404,6 +404,8 @@ variables resulting in missing values.
 col_imputed_na <- na.omit(col_imputed_country)
 data <- select(col_imputed_na, -x28, -x29, -x40, -x43, -x50, -x51, -x52, -x53)
 
+save(data, file = "data.RData") #saving cleaned data for future analysis
+
 data10 <- subset(data[1:10,])
 kable(data10)
 ```
@@ -600,6 +602,7 @@ final_data <- data.frame(
   ,Mortgage       = mortgage_avg
 )
 
+save(final_data, file = "category_data.RData") #saving data with variables grouped by category for future analysis
 
 final_data10 <- subset(final_data[1:10,])
 kable(final_data10)

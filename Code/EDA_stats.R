@@ -126,7 +126,9 @@ salaries_and_financing1_long <- gather(salaries_and_financing1, key = "metric", 
 meal_plot <- ggplot(meal1_long, aes(x = metric, y = value)) +
   geom_boxplot(fill = "#BE49DF", color = "black") +
   labs(title = "Category: Restaurant Meals",
-       x = "Variable", y = "Cost (USD)")
+       x = "Variable", y = "Cost (USD)") + 
+  theme ( plot.title = element_text(size = 11)
+          , axis.title = element_text(size = 9))
 
 restaurant_plot <- ggplot(restaurants1_long, aes(x = metric, y = value)) +
   geom_boxplot(fill = "#BE49DF", color = "black") +
@@ -181,9 +183,8 @@ salary_plot <- ggplot(salaries_and_financing1_long, aes(x = metric, y = value)) 
 #Formatting for the plots to be displayed in a grid
 #par(mfrow = c(3, 4)) -> this command works for base R plots, but not for ggplot2 plots
 library(patchwork)
-meal_plot + restaurant_plot + market_plot + transport_plot + car_plot + utilities_plot + sport_plot + childcare_plot + clothing_plot + rent_plot + salary_plot
-
-
+aggregated_display <- ((meal_plot / restaurant_plot) | market_plot) + (transport_plot + car_plot + utilities_plot + sport_plot + childcare_plot + clothing_plot + rent_plot + salary_plot) + plot_layout(nrow = 6, byrow = FALSE) + plot_annotation(title = "Figure 2.0 - Descriptive Summary for each Category")
+aggregated_display
 
 #ANALYSIS -> Outliers present in x2, x4, x15, x32, x35, x36, x39, x46, x50, x51, x52, x54
   #x2 Meal for 2 People, Mid-range -> Mendrisio, Switzerland USD 213.69 -> considering that this looks at mid-range restaurants the price can be accepted (despite it being on the higher end)
