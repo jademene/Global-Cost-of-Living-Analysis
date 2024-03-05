@@ -16,6 +16,7 @@ setwd(proj_directory)
 library(tidyverse)
 library(dplyr)
 library(ggplot2)
+library(knitr)
 ```
 
 #### Load Data:
@@ -52,7 +53,7 @@ summary(col_data)
 
 As it stands it is hard to understand the meaning of these variables, so let's visualize it using a boxplot:
 
-```{r}
+```{r summary, echo=FALSE}
 col_data_long <- gather(col_data, key = "metric", value = "value", -city, -country, -data_quality)
 
 ggplot(col_data_long, aes(x = metric, y = value)) +
@@ -68,7 +69,7 @@ From Figure 0.0 we can tell that some variables have considerably different cost
 
 Let's create an index table explaining the meaning of each variable label:
 
-```{r}
+```{r index, echo=FALSE}
 index_table <- data.frame(
   column_name = c("city", "country", paste0("x", 1:55), "data_quality"), 
   description = c("Name of the city","Name of the country",
@@ -100,7 +101,7 @@ index_table <- data.frame(
                   "Apartment (3 bedrooms) Outside of Centre","Price per Square Meter to Buy Apartment in City Centre",
                   "Price per Square Meter to Buy Apartment Outside of Centre","Average Monthly Net Salary (After Tax)",
                   "Mortgage Interest Rate in Percentages (%), Yearly, for 20 Years Fixed-Rate", "0 if Numbeo considers that more contributors are needed to increase data quality, else 1"))
-print(index_table)
+kable(index_table)
 ```
 
 ## Missing Values
@@ -115,6 +116,9 @@ We can see that there are 45858 missing values to manage. From our index table w
 AAA <- colSums(is.na(col_data))
 tot <- nrow(col_data)
 percent_AAA <- (AAA / tot) * 100
+```
+
+```{r missing, echo=FALSE}
 barplot(percent_AAA
         , main = "Figure 1.0 - Percentage of Missing Values for Each Variable"
         , xlab = "Variables"
@@ -156,7 +160,9 @@ We can attribute the missing rows to smaller cities for which there wasn't enoug
 ```{r}
 col_imputed_na <- na.omit(col_imputed_country)
 data <- select(col_imputed_na, -x28, -x29, -x40, -x43, -x50, -x51, -x52, -x53)
-print(data)
+
+data10 <- subset(data[1:10,])
+kable(data10)
 ```
 
 Here we go - 'data' the final data set we will be working on. Let's look at how it compares with the raw data, 'col_data'.
@@ -193,17 +199,18 @@ Now based on the variable meaning we are able to create a new data frames that h
 
 ```{r}
 headers                <- data[,1:2]
-meal                   <- data[,3:4]
-restaurants            <- data[,5:10]
+meal                   <- data[,3:5]
+restaurants            <- data[,6:10]
 markets                <- data[,11:29]
 transportation         <- data[,30:33]
 car                    <- data[,34:35]
 utilities              <- data[,36:38]
-sports_and_leisure     <- data[,39:40]
+sports                 <- data[,39:40]
 childcare              <- data[,41]
-clothing_and_shoes     <- data[,42:43]
-rent_per_month         <- data[,46:47]
-salaries_and_financing <- data[,48:49]
+clothing               <- data[,42:45]
+rent                   <- data[,46:47]
+salaries               <- data[,48]
+mortgage               <- data[,49]
 
 meal_avg                   <- round(rowMeans(meal),digits=2)
 restaurants_avg            <- round(rowMeans(restaurants), digits=2)
@@ -211,87 +218,92 @@ markets_avg                <- round(rowMeans(markets),digits=2)
 transportation_avg         <- round(rowMeans(transportation),digits=2)
 car_avg                    <- round(rowMeans(car),digits=2)
 utilities_avg              <- round(rowMeans(utilities),digits=2)
-sports_and_leisure_avg     <- round(rowMeans(sports_and_leisure),digits=2)
+sports_avg                 <- round(rowMeans(sports),digits=2)
 childcare_avg              <- round(rowMeans(childcare),digits=2)
-clothing_and_shoes_avg     <- round(rowMeans(clothing_and_shoes),digits=2)
-rent_per_month_avg         <- round(rowMeans(rent_per_month),digits=2)
-salaries_and_financing_avg <- round(rowMeans(salaries_and_financing),digits=2)
+clothing_avg               <- round(rowMeans(clothing),digits=2)
+rent_avg                   <- round(rowMeans(rent),digits=2)
+salaries_avg               <- round(rowMeans(salaries),digits=2)
+mortgage_avg               <- round(rowMeans(mortgage),digits=2)
 
 final_data <- data.frame(
-  Country = headers
+  Country         = headers
   ,Restaurants    = restaurants_avg
   ,Markets        = markets_avg
   ,Transports     = transportation_avg
   ,Car            = car_avg
   ,Utilities      = utilities_avg
-  ,Entertainment  = sports_and_leisure_avg
+  ,Entertainment  = sports_avg
   ,Childcare      = childcare_avg
-  ,Clothing       = clothing_and_shoes_avg
-  ,MonthlyRent    = rent_per_month_avg
-  ,Salaries       = salaries_and_financing_avg
+  ,Clothing       = clothing_avg
+  ,MonthlyRent    = rent_avg
+  ,Salaries       = salaries_avg
+  ,Mortgage       = mortgage_avg
 )
 
-print(final_data)
+
+final_data10 <- subset(final_data[1:10,])
+kable(final_data10)
 ```
 
-Now let's visualize the descriptive summary for each category as boxplots of 'final_data':
+Now let's visualize the descriptive summary for each category as box plots of 'final_data':
 
-```{r}
+```{r summaryfinal, echo=FALSE}
 meal_long <- gather(meal, key = "metric", value = "value")
 restaurants_long <- gather(restaurants, key = "metric", value = "value")
 markets_long <- gather(markets, key = "metric", value = "value")
 transportation_long <- gather(transportation, key = "metric", value = "value")
 car_long <- gather(car, key = "metric", value = "value")
 utilities_long <- gather(utilities, key = "metric", value = "value")
-sports_and_leisure_long <- gather(sports_and_leisure, key = "metric", value = "value")
+sports_and_leisure_long <- gather(sports, key = "metric", value = "value")
 childcare_long <- gather(childcare, key = "metric", value = "value")
-clothing_and_shoes_long <- gather(clothing_and_shoes, key = "metric", value = "value")
-rent_per_month_long <- gather(rent_per_month, key = "metric", value = "value")
-salaries_and_financing_long <- gather(salaries_and_financing, key = "metric", value = "value")
+clothing_and_shoes_long <- gather(clothing, key = "metric", value = "value")
+rent_per_month_long <- gather(rent, key = "metric", value = "value")
+salaries_and_financing_long <- gather(salaries, key = "metric", value = "value")
+mortgage_long <- gather(mortgage, key = "metric", value = "value")
 
 meal_plot <- ggplot(meal_long, aes(x = metric, y = value)) +
   geom_boxplot(fill = "gold", color = "black") +
-  labs(title = "Distribution of Restaurants Drinks",
-       x = "Variable", y = "Cost (USD)")
+  ggtitle("Restaurants Meals") + 
+  labs(x = "Variable", y = "Cost (USD)")
 
 restaurant_plot <- ggplot(restaurants_long, aes(x = metric, y = value)) +
   geom_boxplot(fill = "gold", color = "black") +
-  labs(title = "Distribution of Restaurants Drinks",
+  labs(title = "Restaurants Drinks",
        x = "Variable", y = "Cost (USD)")
 
 market_plot <- ggplot(markets_long, aes(x = metric, y = value)) +
   geom_boxplot(fill = "gold", color = "black") +
-  labs(title = "Distribution of Markets",
+  labs(title = "Markets",
        x = "Variable", y = "Cost (USD)")
 
 transport_plot <- ggplot(transportation_long, aes(x = metric, y = value)) +
   geom_boxplot(fill = "gold", color = "black") +
-  labs(title = "Distribution of Transportation",
+  labs(title = "Transportation",
        x = "Variable", y = "Cost (USD)")
 
 car_plot <- ggplot(car_long, aes(x = metric, y = value)) +
   geom_boxplot(fill = "gold", color = "black") +
-  labs(title = "Distribution of Car",
+  labs(title = "Car",
        x = "Variable", y = "Cost (USD)")
 
 utilities_plot <- ggplot(utilities_long, aes(x = metric, y = value)) + 
   geom_boxplot(fill = "gold", color = "black") +
-  labs(title = "Distribution of Utilities",
+  labs(title = "Utilities",
        x = "Variable", y = "Cost (USD)")
 
 sport_plot <- ggplot(sports_and_leisure_long, aes(x = metric, y = value)) +
   geom_boxplot(fill = "gold", color = "black") +
-  labs(title = "Distribution of Sports And Leisure",
+  labs(title = "Sports And Leisure",
        x = "Variable", y = "Cost (USD)")
 
 childcare_plot <- ggplot(childcare_long, aes(x = metric, y = value)) +
   geom_boxplot(fill = "gold", color = "black") +
-  labs(title = "Distribution of Childcare",
+  labs(title = "Childcare",
        x = "Variable", y = "Cost (USD)")
 
 clothing_plot <- ggplot(clothing_and_shoes_long, aes(x = metric, y = value)) +
   geom_boxplot(fill = "gold", color = "black") +
-  labs(title = "Distribution of Clothing And Shoes",
+  labs(title = "Clothing And Shoes",
        x = "Variable", y = "Cost (USD)")
 
 rent_plot <- ggplot(rent_per_month_long, aes(x = metric, y = value)) +
@@ -301,13 +313,18 @@ rent_plot <- ggplot(rent_per_month_long, aes(x = metric, y = value)) +
 
 salary_plot <- ggplot(salaries_and_financing_long, aes(x = metric, y = value)) +
   geom_boxplot(fill = "gold", color = "black") +
-  labs(title = "Distribution of Salaries And Financing",
+  ggtitle("Distribution of Salaries") + 
+  labs(x = "Variable", y = "Cost (USD)")
+
+
+mortgage_plot <- ggplot(mortgage_long, aes(x = metric, y = value)) +
+  geom_boxplot(fill = "gold", color = "black") +
+  labs(title = "Distribution of Mortgages",
        x = "Variable", y = "Cost (USD)")
 
 #Formatting for the plots to be displayed in a grid:
 library(patchwork)
-meal_plot + restaurant_plot + market_plot + transport_plot + car_plot + utilities_plot + sport_plot + childcare_plot + clothing_plot + rent_plot + salary_plot
-
+((meal_plot | rent_plot | salary_plot) / market_plot) + plot_annotation(title = "Figure 2.0 - Descriptive Summary for Final Data", subtitle = "Essential needs vs Salary")
 ```
 
 ### Analysis
