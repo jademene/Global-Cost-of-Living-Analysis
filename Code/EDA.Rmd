@@ -229,6 +229,7 @@ mortgage_avg               <- round(rowMeans(mortgage),digits=2)
 
 final_data <- data.frame(
   Country         = headers
+  ,Meals          = meal_avg
   ,Restaurants    = restaurants_avg
   ,Markets        = markets_avg
   ,Transports     = transportation_avg
@@ -242,10 +243,9 @@ final_data <- data.frame(
   ,Mortgage       = mortgage_avg
 )
 
-save(final_data, file = "category_data.RData") #saving data with variables grouped by category for future analysis
+kable(final_data)
 
-final_data10 <- subset(final_data[1:10,])
-kable(final_data10)
+save(final_data, file = "final_data.RData") #saving data with variables grouped by category for future analysis
 ```
 
 Now let's visualize the descriptive summary for each category as box plots of 'final_data':
