@@ -12,4 +12,4 @@ In our concluding phase, we delve into an insightful comparison between develope
 
 Join us as we navigate through the intricacies of statistical analysis and unveil meaningful insights into global living costs.
 
-_Note: this was a collaborative task with other two peers in the inernational BABD master @ POLIMI General School of Management._
+_Note: this was a collaborative task with other two peers in the international BABD master @ POLIMI General School of Management._
